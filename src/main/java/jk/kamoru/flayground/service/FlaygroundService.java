@@ -1,14 +1,14 @@
 package jk.kamoru.flayground.service;
 
 import java.util.Collection;
-import java.util.Map;
-import jk.kamoru.flayground.domain.Flay;
+import jk.kamoru.flayground.FlaygroundController.Faram;
 import jk.kamoru.flayground.domain.Actress;
+import jk.kamoru.flayground.domain.Flay;
 import jk.kamoru.flayground.domain.Studio;
 
 public interface FlaygroundService {
 
-	Collection<Flay> listFlay(Map<String, String> params);
+	Collection<Flay> listFlay(Faram faram);
 
 	Flay getFlay(String opus);
 
@@ -18,7 +18,7 @@ public interface FlaygroundService {
 
 	void callEditorOfSubtitles(String opus);
 
-	Collection<Actress> listActress(Map<String, String> params);
+	Collection<Actress> listActress(Faram faram);
 
 	Actress createActress(Actress actress);
 
@@ -26,7 +26,7 @@ public interface FlaygroundService {
 
 	Actress updateActress(String name, Actress actress);
 
-	Collection<Studio> listStudio(Map<String, String> params);
+	Collection<Studio> listStudio(Faram faram);
 
 	Studio getStudio(String name);
 
