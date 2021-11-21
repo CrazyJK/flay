@@ -1,0 +1,40 @@
+spring:
+    profiles:
+        include: flay
+---
+#flay
+spring:
+    config:
+        activate:
+            on-profile: flay
+
+flay:
+    storage-limit: 7168
+    recyclebin-use: true
+
+---
+#flay-home
+spring:
+    config:
+        activate:
+            on-profile: flay-home
+
+flay:
+    # app location
+    player-app: C:/Program Files/DAUM/PotPlayer/PotPlayerMini64.exe
+    editor-app: C:/Program Files/EditPlus 3/editplus.exe
+    paint-app: C:/Windows/System32/mspaint.exe
+    # for video
+    archive-path: K:/Crazy/Archive
+    storage-path: K:/Crazy/Storage
+    stage-paths: J:/Crazy/Stage, K:/Crazy/Stage
+    cover-path: K:/Crazy/Cover
+    queue-path: K:/Crazy/Queue
+    candidate-path: J:/Torrents/Completed
+    subtitles-path: K:/Crazy/Subtitles
+    info-path: K:/Crazy/Info
+    todayis-paths: J:/Todayis, J:/Enter
+    # for image
+    image-paths: D:/kAmOrU/Pictures/Girls
+    # backup path
+    backup-path: D:/kAmOrU/flayOn
