@@ -160,6 +160,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	}
 
 	private int calcScore(Flay flay) {
+		// TODO calc score
 		return 0;
 	}
 
