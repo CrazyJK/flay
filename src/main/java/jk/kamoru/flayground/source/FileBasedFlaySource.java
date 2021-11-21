@@ -50,15 +50,18 @@ public class FileBasedFlaySource implements FlaySource {
 		for (Entry<Boolean, File[]> entry : pathMap.entrySet()) {
 			boolean instance = entry.getKey();
 			File[] paths = entry.getValue();
+			log.info("[{}]", instance ? "Instance" : "Archive");
+
 			Collection<File> listFiles = new ArrayList<>();
 			for (File path : paths) {
 				assert path.isDirectory();
 
 				Collection<File> found = FileUtils.listFiles(path, null, true);
-				log.info(String.format("%5s file    - [%s] %s", found.size(), instance ? "Instance" : "Archive", path));
+				log.info(String.format("%5s file    - %s", found.size(), path));
 				listFiles.addAll(found);
 			}
 
+			Map<String, Flay> flayMap = instance ? instanceFlayMap : archiveFlayMap;
 			for (File file : listFiles) {
 				Resolved resolved = resolveFile(file);
 				if (resolved.invalid) {
@@ -66,13 +69,13 @@ public class FileBasedFlaySource implements FlaySource {
 					continue;
 				}
 
-				Map<String, Flay> flayMap = instance ? instanceFlayMap : archiveFlayMap;
 				if (!flayMap.containsKey(resolved.opus)) {
 					flayMap.put(resolved.opus, obtainFlay(resolved, instance));
 				}
 
 				addFile(flayMap.get(resolved.opus), file);
 			}
+			log.info(String.format("%5s Flay", flayMap.size()));
 		}
 	}
 
