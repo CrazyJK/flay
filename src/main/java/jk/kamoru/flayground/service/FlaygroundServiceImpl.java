@@ -74,8 +74,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 		// (title = 며느리 or tag = 늙은이) and actress like Karen and rank in (0, 5)
 		// (, ) 로 분리
 		// key operator value 분리
-		String filter = faram.getFilter();
-		
+
 		// order
 		final List<ORDER> orders = faram.getOrder();
 		if (orders.size() > 0) {
