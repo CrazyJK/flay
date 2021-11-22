@@ -71,7 +71,11 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 		}
 
 		// TODO filter
-
+		// (title = 며느리 or tag = 늙은이) and actress like Karen and rank in (0, 5)
+		// (, ) 로 분리
+		// key operator value 분리
+		String filter = faram.getFilter();
+		
 		// order
 		final List<ORDER> orders = faram.getOrder();
 		if (orders.size() > 0) {
@@ -242,6 +246,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	public Collection<Actress> listActress(Faram faram) {
 		List<Actress> list = infoSourceActress.list();
 		// TODO filter
+		// name like Karen and birth start 2000 or body include C or height > 160 or debut = 2020
 		// order
 		final List<ORDER> orders = faram.getOrder();
 		if (orders.size() > 0) {
@@ -329,6 +334,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	public Collection<Studio> listStudio(Faram faram) {
 		List<Studio> list = infoSourceStudio.list();
 		// TODO filter
+		// name = S1 or company = S1
 		// order
 		final List<ORDER> orders = faram.getOrder();
 		if (orders.size() > 0) {
