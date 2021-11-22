@@ -38,3 +38,19 @@ flay:
     image-paths: D:/kAmOrU/Pictures/Girls
     # backup path
     backup-path: D:/kAmOrU/flayOn
+
+---
+spring:
+    config:
+        activate:
+            on-profile: flay-test
+
+flay:
+    archive-path: K:/Crazy/Archive
+    storage-path: K:/Crazy/Storage
+    stage-paths: J:/Crazy/Stage, K:/Crazy/Stage
+    cover-path: K:/Crazy/Cover
+    queue-path: K:/Crazy/Queue
+    candidate-path: J:/Torrents/Completed
+    subtitles-path: K:/Crazy/Subtitles
+    info-path: K:/Crazy/Info
