@@ -11,13 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import jk.kamoru.flayground.FlayProperties;
 import jk.kamoru.flayground.FlaygroundController.Faram;
 import jk.kamoru.flayground.FlaygroundController.Faram.ORDER;
 import jk.kamoru.flayground.FlaygroundController.Faram.SOURCE;
@@ -25,11 +30,13 @@ import jk.kamoru.flayground.commons.FlayUtils;
 import jk.kamoru.flayground.domain.Actress;
 import jk.kamoru.flayground.domain.Flay;
 import jk.kamoru.flayground.domain.Flay.FileType;
+import jk.kamoru.flayground.domain.History;
 import jk.kamoru.flayground.domain.Studio;
 import jk.kamoru.flayground.domain.Tag;
 import jk.kamoru.flayground.domain.Video;
 import jk.kamoru.flayground.source.FlayNotfoundException;
 import jk.kamoru.flayground.source.FlaySource;
+import jk.kamoru.flayground.source.HistorySource;
 import jk.kamoru.flayground.source.InfoSourceActress;
 import jk.kamoru.flayground.source.InfoSourceStudio;
 import jk.kamoru.flayground.source.InfoSourceTag;
@@ -49,6 +56,12 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	@Autowired InfoSourceTag infoSourceTag;
 
 	@Autowired InfoSourceVideo infoSourceVideo;
+
+	@Autowired HistorySource historySource;
+
+	@Autowired ObjectMapper objectMapper;
+
+	@Autowired FlayProperties flayProperties;
 
 	@Override
 	public Collection<Flay> listFlay(Faram faram) {
@@ -163,8 +176,9 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	}
 
 	private int calcScore(Flay flay) {
-		// TODO calc score
-		return 0;
+		return flay.getVideo().getRank() * flayProperties.getScore().getRankPoint()
+				+ flay.getVideo().getPlay() * flayProperties.getScore().getPlayPoint()
+				+ (flay.getFiles().get(Flay.FileType.SUBTITLES).size() > 0 ? 1 : 0) * flayProperties.getScore().getSubtitlesPoint();
 	}
 
 	@Override
@@ -183,7 +197,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 		log.info("changed video={}, files={}", merged.isChangedVideo(), merged.isChangedFiles());
 		// set file
 		if (merged.isChangedFiles()) {
-			final String newFilename = String.format("[%s][%s][%s][%s][%s]", merged.getStudio().getName(), merged.getOpus(), merged.getTitle(), String.join(",", merged.getActress().stream().map(a -> a.getName()).toList()), merged.getRelease());
+			final String newFilename = flay.getFullname();
 			log.info("newFilename {}", newFilename);
 
 			Map<FileType, List<File>> newFiles = new HashMap<>();
@@ -220,8 +234,15 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 		}
 		// set video
 		if (merged.isChangedVideo()) {
-			infoSourceVideo.update(merged.getVideo());
-			// TODO history save
+			Video updatedVideo = infoSourceVideo.update(merged.getVideo());
+
+			History history;
+			try {
+				history = History.getInstance(opus, History.Action.UPDATE, objectMapper.writeValueAsString(updatedVideo));
+			} catch (JsonProcessingException e) {
+				throw new FlayException("fail to convert video", e);
+			}
+			historySource.save(history);
 		}
 
 		// reset changed
@@ -231,14 +252,19 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 		return flaySource.update(merged);
 	}
 
+	@Async
 	@Override
 	public void callPlayer(String opus) {
-		// TODO exec palyer
+		Flay flay = flaySource.get(opus).orElseThrow(FlayNotfoundException::new);
+		execCommand(flayProperties.getPlayerApp(), flay.getFiles().get(Flay.FileType.MOVIE).get(0));
+		historySource.save(History.getInstance(flay.getOpus(), History.Action.PLAY, flay.getFullname()));
 	}
 
+	@Async
 	@Override
 	public void callEditorOfSubtitles(String opus) {
-		// TODO exec editor
+		Flay flay = flaySource.get(opus).orElseThrow(FlayNotfoundException::new);
+		execCommand(flayProperties.getEditorApp(), flay.getFiles().get(Flay.FileType.SUBTITLES).get(0));
 	}
 
 	@Override
@@ -397,7 +423,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T merge(T local, T remote) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private <T> T merge(T local, T remote) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Class<?> clazz = local.getClass();
 		String className = clazz.getSimpleName();
 		Object merged = clazz.getDeclaredConstructor().newInstance();
@@ -505,6 +531,15 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 		}
 
 		return (T) merged;
+	}
+
+	private void execCommand(File... files) {
+		List<String> command = Stream.of(files).map(File::getAbsolutePath).toList();
+		try {
+			new ProcessBuilder(command).start();
+		} catch (IOException e) {
+			throw new FlayException("fail to exec", e);
+		}
 	}
 
 }

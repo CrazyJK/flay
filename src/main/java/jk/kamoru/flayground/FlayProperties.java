@@ -52,6 +52,7 @@ public class FlayProperties {
 		private String archiveCsvFilename = "flay-archive.csv";
 	}
 
+	@Data
 	public static class InfoFilename {
 		public String HISTORY = "history.csv";
 		public String ACTRESS = "actress.json";

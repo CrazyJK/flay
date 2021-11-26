@@ -55,4 +55,8 @@ public class Flay {
 				+ files.get(FileType.COVER).stream().mapToLong(File::length).sum();
 	}
 
+	public String getFullname() {
+		return String.format("[%s][%s][%s][%s][%s]", getStudio().getName(), getOpus(), getTitle(), String.join(",", getActress().stream().map(a -> a.getName()).toList()), getRelease());
+	}
+
 }
