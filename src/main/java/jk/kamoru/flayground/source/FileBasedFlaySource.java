@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import jk.kamoru.flayground.FlayProperties;
+import jk.kamoru.flayground.Flayground;
 import jk.kamoru.flayground.commons.FlayUtils;
 import jk.kamoru.flayground.domain.Flay;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class FileBasedFlaySource implements FlaySource {
 
 	@Autowired InfoSourceStudio infoSourceStudio;
 
-	@Autowired FlayProperties flayProperties;
+	@Autowired Flayground flayground;
 
 	Map<Boolean, File[]> pathMap = new HashMap<>();
 
@@ -48,8 +48,8 @@ public class FileBasedFlaySource implements FlaySource {
 	@PostConstruct
 	@Override
 	public void load() {
-		pathMap.put(true, ArrayUtils.addAll(flayProperties.getStagePaths(), flayProperties.getCoverPath(), flayProperties.getStoragePath()));
-		pathMap.put(false, ArrayUtils.toArray(flayProperties.getArchivePath()));
+		pathMap.put(true, ArrayUtils.addAll(flayground.getStagePaths(), flayground.getCoverPath(), flayground.getStoragePath()));
+		pathMap.put(false, ArrayUtils.toArray(flayground.getArchivePath()));
 
 		for (Entry<Boolean, File[]> entry : pathMap.entrySet()) {
 			boolean instance = entry.getKey();
@@ -84,7 +84,7 @@ public class FileBasedFlaySource implements FlaySource {
 					flay.setStudio(infoSourceStudio.getOrNew(part[0]));
 					flay.setOpus(part[1]);
 					flay.setTitle(part[2]);
-					flay.setActress(Stream.of(StringUtils.split(part[3], ",")) .map(name -> infoSourceActress.getOrNew(name.trim())).toList());
+					flay.setActress(Stream.of(StringUtils.split(part[3], ",")).map(name -> infoSourceActress.getOrNew(name.trim())).toList());
 					flay.setRelease(part[4]);
 					flay.setVideo(infoSourceVideo.getOrNew(part[1]));
 					flay.setInstance(instance);

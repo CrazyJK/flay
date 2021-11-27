@@ -22,10 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import jk.kamoru.flayground.FlayProperties;
-import jk.kamoru.flayground.FlaygroundController.Faram;
-import jk.kamoru.flayground.FlaygroundController.Faram.ORDER;
-import jk.kamoru.flayground.FlaygroundController.Faram.SOURCE;
+import jk.kamoru.flayground.Flayground;
 import jk.kamoru.flayground.commons.FlayUtils;
 import jk.kamoru.flayground.domain.Actress;
 import jk.kamoru.flayground.domain.Flay;
@@ -41,6 +38,9 @@ import jk.kamoru.flayground.source.InfoSourceActress;
 import jk.kamoru.flayground.source.InfoSourceStudio;
 import jk.kamoru.flayground.source.InfoSourceTag;
 import jk.kamoru.flayground.source.InfoSourceVideo;
+import jk.kamoru.flayground.web.FlaygroundController.Faram;
+import jk.kamoru.flayground.web.FlaygroundController.Faram.ORDER;
+import jk.kamoru.flayground.web.FlaygroundController.Faram.SOURCE;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -61,7 +61,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 
 	@Autowired ObjectMapper objectMapper;
 
-	@Autowired FlayProperties flayProperties;
+	@Autowired Flayground flayground;
 
 	@Override
 	public Collection<Flay> listFlay(Faram faram) {
@@ -176,9 +176,9 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	}
 
 	private int calcScore(Flay flay) {
-		return flay.getVideo().getRank() * flayProperties.getScore().getRankPoint()
-				+ flay.getVideo().getPlay() * flayProperties.getScore().getPlayPoint()
-				+ (flay.getFiles().get(Flay.FileType.SUBTITLES).size() > 0 ? 1 : 0) * flayProperties.getScore().getSubtitlesPoint();
+		return flay.getVideo().getRank() * flayground.getScore().getRankPoint()
+				+ flay.getVideo().getPlay() * flayground.getScore().getPlayPoint()
+				+ (flay.getFiles().get(Flay.FileType.SUBTITLES).size() > 0 ? 1 : 0) * flayground.getScore().getSubtitlesPoint();
 	}
 
 	@Override
@@ -256,7 +256,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	@Override
 	public void callPlayer(String opus) {
 		Flay flay = flaySource.get(opus).orElseThrow(FlayNotfoundException::new);
-		execCommand(flayProperties.getPlayerApp(), flay.getFiles().get(Flay.FileType.MOVIE).get(0));
+		execCommand(flayground.getPlayerApp(), flay.getFiles().get(Flay.FileType.MOVIE).get(0));
 		historySource.save(History.getInstance(flay.getOpus(), History.Action.PLAY, flay.getFullname()));
 	}
 
@@ -264,7 +264,7 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 	@Override
 	public void callEditorOfSubtitles(String opus) {
 		Flay flay = flaySource.get(opus).orElseThrow(FlayNotfoundException::new);
-		execCommand(flayProperties.getEditorApp(), flay.getFiles().get(Flay.FileType.SUBTITLES).get(0));
+		execCommand(flayground.getEditorApp(), flay.getFiles().get(Flay.FileType.SUBTITLES).get(0));
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import jk.kamoru.flayground.FlaygroundController.Faram.FIELD;
+import jk.kamoru.flayground.web.FlaygroundController.Faram.FIELD;
 
 public class FlayJsonFilter extends SimpleBeanPropertyFilter {
 

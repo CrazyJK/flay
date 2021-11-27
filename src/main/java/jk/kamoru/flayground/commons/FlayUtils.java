@@ -10,20 +10,20 @@ import org.apache.commons.lang3.math.NumberUtils;
 public class FlayUtils {
 
 	public static class FILE {
-		public static final String[] VIDEO_SUFFIXs = new String[] {"avi", "mpg", "mkv", "wmv", "mp4", "mov", "rmvb", "m2ts"};
-		public static final String[] IMAGE_SUFFIXs = new String[] {"jpg", "jpeg", "png", "gif", "jfif", "webp"};
-		public static final String[] SUBTITLES_SUFFIXs = new String[] {"smi", "srt", "ass", "smil"};
+		public static final String[] VIDEO_SUFFIX = new String[] {"avi", "mpg", "mkv", "wmv", "mp4", "mov", "rmvb", "m2ts"};
+		public static final String[] IMAGE_SUFFIX = new String[] {"jpg", "jpeg", "png", "gif", "jfif", "webp"};
+		public static final String[] SUBTITLES_SUFFIX = new String[] {"smi", "srt", "ass", "smil"};
 
 		public static boolean isVideo(File file) {
-			return ArrayUtils.contains(VIDEO_SUFFIXs, FilenameUtils.getExtension(file.getName()).toLowerCase());
+			return ArrayUtils.contains(VIDEO_SUFFIX, FilenameUtils.getExtension(file.getName()).toLowerCase());
 		}
 
 		public static boolean isImage(File file) {
-			return ArrayUtils.contains(IMAGE_SUFFIXs, FilenameUtils.getExtension(file.getName()).toLowerCase());
+			return ArrayUtils.contains(IMAGE_SUFFIX, FilenameUtils.getExtension(file.getName()).toLowerCase());
 		}
 
 		public static boolean isSubtitles(File file) {
-			return ArrayUtils.contains(SUBTITLES_SUFFIXs, FilenameUtils.getExtension(file.getName()).toLowerCase());
+			return ArrayUtils.contains(SUBTITLES_SUFFIX, FilenameUtils.getExtension(file.getName()).toLowerCase());
 		}
 	}
 

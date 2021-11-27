@@ -5,17 +5,17 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import jk.kamoru.flayground.FlayProperties;
+import jk.kamoru.flayground.Flayground;
 import jk.kamoru.flayground.domain.Studio;
 
 @Repository
 public class InfoSourceStudio extends InfoSourceJsonAdapter<Studio, String> {
 
-	@Autowired FlayProperties flayProperties;
+	@Autowired Flayground flayground;
 
 	@Override
 	File getInfoFile() {
-		return new File(flayProperties.getInfoPath(), flayProperties.getInfoFilename().STUDIO);
+		return new File(flayground.getInfoPath(), flayground.getInfoFilename().STUDIO);
 	}
 
 	@Override

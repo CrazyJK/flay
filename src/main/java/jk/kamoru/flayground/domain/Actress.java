@@ -1,7 +1,7 @@
 package jk.kamoru.flayground.domain;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class Actress implements Info<String> {
 	Integer debut;
 	String comment;
 	boolean favorite;
-	@JsonIgnore List<File> covers;
+	@JsonIgnore Collection<File> covers;
 
 	public Actress(String name) {
 		setKey(name);

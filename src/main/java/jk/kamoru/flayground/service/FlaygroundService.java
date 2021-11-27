@@ -1,10 +1,10 @@
 package jk.kamoru.flayground.service;
 
 import java.util.Collection;
-import jk.kamoru.flayground.FlaygroundController.Faram;
 import jk.kamoru.flayground.domain.Actress;
 import jk.kamoru.flayground.domain.Flay;
 import jk.kamoru.flayground.domain.Studio;
+import jk.kamoru.flayground.web.FlaygroundController.Faram;
 
 public interface FlaygroundService {
 

@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import jk.kamoru.flayground.FlayProperties;
+import jk.kamoru.flayground.Flayground;
 import jk.kamoru.flayground.domain.History;
 import jk.kamoru.flayground.service.FlayException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 public class HistorySourceCsv implements HistorySource {
 
-	@Autowired FlayProperties flayProperties;
+	@Autowired Flayground flayground;
 
 	private Map<Long, History> historyMap = new TreeMap<>(Comparator.reverseOrder());
 
@@ -59,7 +59,7 @@ public class HistorySourceCsv implements HistorySource {
 
 	@PostConstruct
 	protected void load() throws IOException {
-		csvPath = Paths.get(flayProperties.getInfoPath().toString(), flayProperties.getInfoFilename().getHISTORY());
+		csvPath = Paths.get(flayground.getInfoPath().toString(), flayground.getInfoFilename().getHISTORY());
 		List<String> allLines = Files.readAllLines(csvPath, StandardCharsets.UTF_8);
 		allLines.forEach(line -> {
 			if (Strings.isNotEmpty(line)) {

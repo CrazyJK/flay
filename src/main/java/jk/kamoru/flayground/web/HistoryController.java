@@ -1,4 +1,4 @@
-package jk.kamoru.flayground;
+package jk.kamoru.flayground.web;
 
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
