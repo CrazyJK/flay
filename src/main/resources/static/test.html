@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>flay test</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="base/base.css" />
+		<link rel="stylesheet" href="test.css" />
+		<script src="/webjars/jquery/jquery.min.js"></script>
+		<script src="base/base.js"></script>
+	</head>
+	<body>
+		<header>Test Flay List</header>
+		<main>
+			<div class="flay-header">
+				<label class="flay-no">#</label>
+				<label class="flay-studio">Studio</label>
+				<label class="flay-opus">Opus</label>
+				<label class="flay-title">Title</label>
+				<label class="flay-actress">Actress</label>
+				<label class="flay-release">Release</label>
+				<label class="flay-modified">Modified</label>
+				<label class="flay-rank">Rank</label>
+				<label class="flay-play">Play</label>
+			</div>
+			<ul id="list" class="flay-list"></ul>
+		</main>
+		<footer>
+			<div>
+				<label><span id="flayCount"></span> Flay</label>
+				<label>Source: <span id="source"></span></label>
+				<label>Filter: <span id="filter"></span></label>
+				<label>Fields: <span id="fields"></span></label>
+				<label>Order: <span id="order"></span></label>
+			</div>
+		</footer>
+		<script src="test.js"></script>
+	</body>
+</html>
