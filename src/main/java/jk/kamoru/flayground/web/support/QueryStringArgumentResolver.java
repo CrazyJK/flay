@@ -14,6 +14,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * url 쿼리 스트링을 객체에 맵핑
+ */
 @Slf4j
 @Component
 public class QueryStringArgumentResolver implements HandlerMethodArgumentResolver {
