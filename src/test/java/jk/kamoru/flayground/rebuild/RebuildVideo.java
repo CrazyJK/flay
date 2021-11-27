@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 public class RebuildVideo {
 
-	public static void main(String[] args) throws Exception {
+	public static void mainX(String[] args) throws Exception {
 		ObjectMapper jsonReader = new ObjectMapper();
 		ObjectWriter jsonWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 
