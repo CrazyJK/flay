@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="../base/base.css" />
+		<link rel="stylesheet" href="../fontawesome/css/all.css" />
+		<style>
+			body {
+				background-color: #000;
+				overflow: hidden;
+			}
+			.flay-card {
+				position: relative;
+				margin: 0 auto;
+				width: 800px;
+			}
+			.flay-card {
+				text-shadow: 1px 1px 2px #000;
+			}
+			.flay-card > img {
+				width: 100%;
+			}
+			.flay-card > div {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+			}
+			.flay-card > div > div {
+				margin: 0.5rem;
+				padding: 0.5rem;
+			}
+			.flay-card > div > div.flay-actress-wrap {
+				padding: 0 0.5rem;
+			}
+			.flay-card > div > div > div {
+				padding: 0.5rem 0;
+				margin-bottom: 0.25rem;
+			}
+			.flay-card label {
+				font-weight: 700;
+				color: #fff;
+				padding: 0.25rem 0.5rem;
+			}
+			.flay-card:hover label {
+				background-color: rgb(0 0 0 / 75%);
+				border-radius: 0.5rem;
+			}
+		</style>
+		<script src="/webjars/jquery/jquery.min.js"></script>
+		<script src="../base/base.js"></script>
+		<script src="../base/flay-utils.js"></script>
+	</head>
+	<body>
+		<article class="flay-card">
+			<img />
+			<div>
+				<div><label class="flay-title lead"></label></div>
+				<div class="flay-rank-wrap">
+					<!-- <div class="rank-choice">
+						<label><input type="radio" name="rank" value="-1" /><i class="fas fa-thumbs-down"></i></label>
+						<label><input type="radio" name="rank" value="0" /><i class="fas fa-circle"></i></label>
+						<label><input type="radio" name="rank" value="1" /><i class="fas fa-star"></i></label>
+						<label><input type="radio" name="rank" value="2" /><i class="fas fa-star"></i></label>
+						<label><input type="radio" name="rank" value="3" /><i class="fas fa-star"></i></label>
+						<label><input type="radio" name="rank" value="4" /><i class="fas fa-star"></i></label>
+						<label><input type="radio" name="rank" value="5" /><i class="fas fa-star"></i></label>
+					</div> -->
+				</div>
+				<div><label class="flay-studio"></label></div>
+				<div><label class="flay-opus"></label></div>
+				<div class="flay-actress-wrap"></div>
+				<div><label class="flay-release"></label></div>
+				<div class="flay-file-wrap"></div>
+				<div class="flay-tag-wrap"></div>
+				<div><label class="flay-comment small"></label></div>
+			</div>
+		</article>
+	</body>
+	<script>
+		console.log('opus', reqParam.opus);
+		$('.flay-card > img').attr('src', `/static/cover/${reqParam.opus}`);
+		$.ajax({
+			url: '/ground/flay/' + reqParam.opus,
+			success: (flay) => {
+				console.log(flay);
+				document.title = '[' + flay.opus + '] ' + flay.title + ' - Flayground';
+				$('.flay-title').html(flay.title);
+				$('.flay-rank-wrap').append(resolveRank(flay.video.rank));
+				$('.flay-studio').html(flay.studio.name);
+				$('.flay-opus').html(flay.opus);
+				$('.flay-actress-wrap').append(
+					flay.actress.map(
+						(a) => `<div class="flay-actress ${a.favorite ? 'favorite' : ''}">
+							<label><i class="fa${a.favorite ? 's favorite' : 'r'} fa-heart"></i></label>
+							<label>${a.name}</label>
+							<label class="small">${a.localName}</label>
+							<label class="small">${a.birth}</label>
+							<label class="small">${a.debut}</label>
+							<label class="small">${a.body}</label>
+							<label class="small">${a.height}</label>
+						</div>`,
+					),
+				);
+				$('.flay-release').html(flay.release);
+				$('.flay-file-wrap').append(
+					flay.files.MOVIE.length > 0 ? `<label class="small"><a href="javascript:View.movie('${flay.opus}')">Movie</a></label>` : `<label class="small">noM</label>`,
+					flay.files.SUBTITLES.length > 0 ? `<label class="small"><a href="javascript:View.subtitles('${flay.opus}')">Sub</a></label>` : `<label class="small">noS</label>`,
+				);
+				$('.flay-tag-wrap').append(flay.video.tags.map((t) => `<label class="small">${t.name}</label>`).join(' '));
+				$('.flay-comment').html(flay.video.comment);
+			},
+		});
+
+		const resolveRank = (rank) => {
+			return $('<div>', { class: 'rank-choice' }).append(
+				`<label><input type="radio" name="rank" value="-1" /><i class="fas fa-thumbs-down"></i></label>`,
+				`<label><input type="radio" name="rank" value="0" /><i class="fas fa-circle"></i></label>`,
+				`<label><input type="radio" name="rank" value="1" /><i class="fas fa-star"></i></label>`,
+				`<label><input type="radio" name="rank" value="2" /><i class="fas fa-star"></i></label>`,
+				`<label><input type="radio" name="rank" value="3" /><i class="fas fa-star"></i></label>`,
+				`<label><input type="radio" name="rank" value="4" /><i class="fas fa-star"></i></label>`,
+				`<label><input type="radio" name="rank" value="5" /><i class="fas fa-star"></i></label>`,
+			);
+		};
+
+		$('input[name="rank"]').on('change', (e) => {
+			console.log(e.target.value);
+		});
+	</script>
+</html>

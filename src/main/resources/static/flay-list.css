@@ -16,11 +16,15 @@ header {
 	font-size: 1.125rem;
 	margin: 0;
 	padding: 1rem;
+	display: flex;
+	gap: 0 1rem;
 }
 main {
 	background-color: var(--background-color);
 	color: var(--text-color);
 	padding-bottom: 1rem;
+	height: calc(100vh - 100px);
+	overflow-y: auto;
 }
 footer {
 	position: sticky;
@@ -41,7 +45,7 @@ footer > div {
 
 .flay-header {
 	position: sticky;
-	top: 60px;
+	top: 0;
 	background-color: var(--background-color);
 	border-bottom: 1px solid var(--border-color);
 	color: var(--text-color);
@@ -94,7 +98,8 @@ footer > div {
 	flex: 1 1 auto;
 }
 .flay-actress {
-	flex: 0 0 120px;
+	flex: 1 1 120px;
+	text-align: right;
 }
 .flay-release {
 	flex: 0 0 90px;
@@ -103,10 +108,31 @@ footer > div {
 	flex: 0 0 90px;
 }
 .flay-rank {
-	flex: 0 0 56px;
+	flex: 0 0 32px;
 	text-align: right;
 }
 .flay-play {
-	flex: 0 0 56px;
+	flex: 0 0 32px;
 	text-align: right;
+}
+.flay-files {
+	flex: 0 0 52px;
+	display: flex;
+	justify-content: center;
+}
+
+.flay-actress-item {
+	margin: auto 0.25rem;
+}
+.flay-actress-item.favorite {
+	color: var(--actress-favorite-color);
+}
+.flay-tag,
+.flay-comment {
+	font-size: 90%;
+	color: var(--emphasis-color);
+	margin: auto 0.25rem;
+}
+.flay-tag-item {
+	margin: auto 0.25rem;
 }

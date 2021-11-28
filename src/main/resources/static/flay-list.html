@@ -6,12 +6,16 @@
 		<title>flay test</title>
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		<link rel="stylesheet" href="base/base.css" />
-		<link rel="stylesheet" href="test.css" />
+		<link rel="stylesheet" href="flay-list.css" />
 		<script src="/webjars/jquery/jquery.min.js"></script>
 		<script src="base/base.js"></script>
+		<script src="base/flay-utils.js"></script>
 	</head>
 	<body>
-		<header>Test Flay List</header>
+		<header>
+			Test Flay List
+			<label><input type="checkbox" id="theme" /><span>Theme</span></label>
+		</header>
 		<main>
 			<div class="flay-header">
 				<label class="flay-no">#</label>
@@ -21,8 +25,9 @@
 				<label class="flay-actress">Actress</label>
 				<label class="flay-release">Release</label>
 				<label class="flay-modified">Modified</label>
-				<label class="flay-rank">Rank</label>
-				<label class="flay-play">Play</label>
+				<label class="flay-rank">R</label>
+				<label class="flay-play">P</label>
+				<label class="flay-files">Files</label>
 			</div>
 			<ul id="list" class="flay-list"></ul>
 		</main>
@@ -35,6 +40,7 @@
 				<label>Order: <span id="order"></span></label>
 			</div>
 		</footer>
-		<script src="test.js"></script>
+
+		<script src="flay-list.js"></script>
 	</body>
 </html>

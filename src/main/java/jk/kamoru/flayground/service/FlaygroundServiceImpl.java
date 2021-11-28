@@ -2,6 +2,7 @@ package jk.kamoru.flayground.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -535,8 +536,10 @@ public class FlaygroundServiceImpl implements FlaygroundService {
 
 	private void execCommand(File... files) {
 		List<String> command = Stream.of(files).map(File::getAbsolutePath).toList();
+		log.info("exec {}", command);
 		try {
-			new ProcessBuilder(command).start();
+			Process process = new ProcessBuilder(command).redirectOutput(Redirect.DISCARD).redirectError(Redirect.INHERIT).start();
+			log.info("process {}", process.info());
 		} catch (IOException e) {
 			throw new FlayException("fail to exec", e);
 		}
